@@ -5,7 +5,7 @@ const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
 
-  // handles on change of input
+  // handles change of input
   const handleNameChange = (event) => {
     console.log(event.target.value);
     setNewName(event.target.value);
@@ -18,8 +18,15 @@ const App = () => {
       name: newName,
     };
 
-    setPersons(persons.concat(nameObject));
-    setNewName("");
+    // find out if the name entered already exists in the phonebook
+    const duplicate = persons.find((person) => person.name === newName);
+    if (duplicate) {
+      alert(`${newName} already exists in the phonebook`);
+      setNewName("");
+    } else {
+      setPersons(persons.concat(nameObject));
+      setNewName("");
+    }
   };
 
   return (
