@@ -50,15 +50,36 @@ const App = () => {
     };
 
     // find out if the name or number entered already exists in the phonebook
-    const duplicateName = persons.find((person) => person.name === newName);
-    const duplicateNumber = persons.find(
-      (person) => person.number === newNumber
+    const duplicateName = persons.find(
+      (person) => person.name.toLowerCase() === newName.toLowerCase()
     );
+    // const duplicateNumber = persons.find(
+    //   (person) => person.number === newNumber
+    // );
 
-    if (duplicateName || duplicateNumber) {
-      alert(`${newName} or ${newNumber} already exists in the phonebook`);
-      setNewName("");
-      setNewNumber("");
+    if (duplicateName) {
+      // if duplicate name, ask user if they want to replace the number
+      if (
+        confirm(
+          `${newName} is already aded to the phonebook, replace the old number with a new one?`
+        )
+      ) {
+        personService.update(duplicateName.id, nameObject).then((response) => {
+          console.log(response);
+          const personsCopy = persons.map((person) => {
+            if (person.id === duplicateName.id) {
+              return nameObject;
+            } else {
+              return person;
+            }
+          });
+          setPersons(personsCopy);
+          setNewName("");
+          setNewNumber("");
+        });
+      } else {
+        console.log("cancelled!");
+      }
     } else {
       // if the name and number is not a duplicate, add new person to the database and re-set the list
       personService.create(nameObject).then((response) => {
@@ -75,7 +96,6 @@ const App = () => {
   const handleDelete = (name, id) => {
     if (confirm(`Delete ${name} ?`) === true) {
       personService.remove(id).then((response) => {
-        console.log(response);
         // filter the deleted person out of the persons list
         const personsCopy = persons.filter((person) => person.id !== id);
         console.log(personsCopy);
