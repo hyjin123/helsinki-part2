@@ -41,7 +41,6 @@ const App = () => {
     person.name.toLowerCase().includes(newSearch.toLowerCase())
   );
 
-  console.log(filteredPersons);
   // handles input submission
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -61,6 +60,13 @@ const App = () => {
       setNewName("");
       setNewNumber("");
     } else {
+      // if the name and number is not a duplicate, add new person to the database
+      axios
+        .post("http://localhost:3002/persons", nameObject)
+        .then((response) => console.log(response.data))
+        .catch((error) => console.log(error))
+
+      // add new person to the list of persons
       setPersons(persons.concat(nameObject));
       setNewName("");
       setNewNumber("");
