@@ -3,6 +3,7 @@ import Person from "./components/Person";
 import Search from "./components/Search";
 import Form from "./components/Form";
 import axios from "axios";
+import personService from "./services/personService";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,14 +13,13 @@ const App = () => {
 
   // fetch data from the json server
   useEffect(() => {
-    axios.get("http://localhost:3002/persons").then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((response) => {
+      setPersons(response);
     });
   }, []);
 
   // handles change of name input
   const handleNameChange = (event) => {
-    console.log(event.target.value);
     setNewName(event.target.value);
   };
 
@@ -60,16 +60,14 @@ const App = () => {
       setNewName("");
       setNewNumber("");
     } else {
-      // if the name and number is not a duplicate, add new person to the database
-      axios
-        .post("http://localhost:3002/persons", nameObject)
-        .then((response) => console.log(response.data))
-        .catch((error) => console.log(error))
-
-      // add new person to the list of persons
-      setPersons(persons.concat(nameObject));
-      setNewName("");
-      setNewNumber("");
+      // if the name and number is not a duplicate, add new person to the database and re-set the list
+      personService.create(nameObject).then((response) => {
+        console.log(response);
+        // add new person to the list of persons
+        setPersons(persons.concat(nameObject));
+        setNewName("");
+        setNewNumber("");
+      });
     }
   };
 
