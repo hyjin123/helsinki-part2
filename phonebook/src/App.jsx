@@ -71,6 +71,21 @@ const App = () => {
     }
   };
 
+  // handle delete of person from the list
+  const handleDelete = (name, id) => {
+    if (confirm(`Delete ${name} ?`) === true) {
+      personService.remove(id).then((response) => {
+        console.log(response);
+        // filter the deleted person out of the persons list
+        const personsCopy = persons.filter((person) => person.id !== id);
+        console.log(personsCopy);
+        setPersons(personsCopy);
+      });
+    } else {
+      console.log("cancelled!");
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -85,7 +100,11 @@ const App = () => {
       <h2>Numbers</h2>
 
       {filteredPersons.map((person) => (
-        <Person key={person.name} person={person} />
+        <Person
+          key={person.name}
+          person={person}
+          handleDelete={() => handleDelete(person.name, person.id)}
+        />
       ))}
     </div>
   );
