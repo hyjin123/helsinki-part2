@@ -48,21 +48,18 @@ const App = () => {
   // handles input submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    const nameObject = {
-      name: newName,
-      number: newNumber,
-      id: persons.length + 1,
-    };
 
     // find out if the name or number entered already exists in the phonebook
     const duplicateName = persons.find(
       (person) => person.name.toLowerCase() === newName.toLowerCase()
     );
-    // const duplicateNumber = persons.find(
-    //   (person) => person.number === newNumber
-    // );
 
     if (duplicateName) {
+      const nameObject = {
+        name: newName,
+        number: newNumber,
+        id: duplicateName.id,
+      };
       // if duplicate name, ask user if they want to replace the number
       if (
         confirm(
@@ -84,7 +81,7 @@ const App = () => {
             setNewName("");
             setNewNumber("");
             // show the confirm notification for few seconds after editing a person
-            setMessage(`${newName}'s number was edited'`);
+            setMessage(`${newName}'s number was edited`);
             setTimeout(() => {
               setMessage(null);
             }, 3000);
@@ -101,6 +98,11 @@ const App = () => {
         console.log("cancelled!");
       }
     } else {
+      const nameObject = {
+        name: newName,
+        number: newNumber,
+        id: persons.length + 1,
+      };
       // if the name and number is not a duplicate, add new person to the database and re-set the list
       personService.create(nameObject).then((response) => {
         console.log(response);
