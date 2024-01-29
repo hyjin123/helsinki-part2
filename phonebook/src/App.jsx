@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
+import "./index.css";
 import Person from "./components/Person";
 import Search from "./components/Search";
 import Form from "./components/Form";
 import axios from "axios";
 import personService from "./services/personService";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newSearch, setNewSearch] = useState("");
+  const [message, setMessage] = useState(null);
 
   // fetch data from the json server
   useEffect(() => {
@@ -76,6 +79,11 @@ const App = () => {
           setPersons(personsCopy);
           setNewName("");
           setNewNumber("");
+          // show the confirm notification for few seconds after editing a person
+          setMessage(`${newName}'s number was edited'`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 3000);
         });
       } else {
         console.log("cancelled!");
@@ -88,6 +96,11 @@ const App = () => {
         setPersons(persons.concat(nameObject));
         setNewName("");
         setNewNumber("");
+        // show the confirm notification for few seconds after adding a new person
+        setMessage(`${newName} was added`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 3000);
       });
     }
   };
@@ -109,6 +122,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Search newSearch={newSearch} handleSearchChange={handleSearchChange} />
       <Form
         handleSubmit={handleSubmit}
