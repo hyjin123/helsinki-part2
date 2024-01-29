@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newSearch, setNewSearch] = useState("");
   const [message, setMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   // fetch data from the json server
   useEffect(() => {
@@ -68,24 +69,34 @@ const App = () => {
           `${newName} is already aded to the phonebook, replace the old number with a new one?`
         )
       ) {
-        personService.update(duplicateName.id, nameObject).then((response) => {
-          console.log(response);
-          const personsCopy = persons.map((person) => {
-            if (person.id === duplicateName.id) {
-              return nameObject;
-            } else {
-              return person;
-            }
+        personService
+          .update(duplicateName.id, nameObject)
+          .then((response) => {
+            console.log(response);
+            const personsCopy = persons.map((person) => {
+              if (person.id === duplicateName.id) {
+                return nameObject;
+              } else {
+                return person;
+              }
+            });
+            setPersons(personsCopy);
+            setNewName("");
+            setNewNumber("");
+            // show the confirm notification for few seconds after editing a person
+            setMessage(`${newName}'s number was edited'`);
+            setTimeout(() => {
+              setMessage(null);
+            }, 3000);
+          })
+          .catch((error) => {
+            setErrorMessage(
+              `${newName} has already been removed from the server`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 3000);
           });
-          setPersons(personsCopy);
-          setNewName("");
-          setNewNumber("");
-          // show the confirm notification for few seconds after editing a person
-          setMessage(`${newName}'s number was edited'`);
-          setTimeout(() => {
-            setMessage(null);
-          }, 3000);
-        });
       } else {
         console.log("cancelled!");
       }
@@ -115,6 +126,11 @@ const App = () => {
         const personsCopy = persons.filter((person) => person.id !== id);
         console.log(personsCopy);
         setPersons(personsCopy);
+        // show the confirm notification for few seconds after deleting a new person
+        setErrorMessage(`${name} was deleted`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
       });
     } else {
       console.log("cancelled!");
@@ -125,7 +141,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} errorMessage={errorMessage} />
       <Search newSearch={newSearch} handleSearchChange={handleSearchChange} />
       <Form
         handleSubmit={handleSubmit}
