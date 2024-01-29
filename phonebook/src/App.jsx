@@ -50,6 +50,7 @@ const App = () => {
     const nameObject = {
       name: newName,
       number: newNumber,
+      id: persons.length + 1,
     };
 
     // find out if the name or number entered already exists in the phonebook
@@ -107,6 +108,7 @@ const App = () => {
 
   // handle delete of person from the list
   const handleDelete = (name, id) => {
+    console.log(name, id);
     if (confirm(`Delete ${name} ?`) === true) {
       personService.remove(id).then((response) => {
         // filter the deleted person out of the persons list
@@ -119,6 +121,7 @@ const App = () => {
     }
   };
 
+  console.log(filteredPersons);
   return (
     <div>
       <h2>Phonebook</h2>
