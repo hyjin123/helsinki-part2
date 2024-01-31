@@ -1,7 +1,7 @@
 import React from "react";
 import Country from "./Country";
 
-const Countries = ({ countriesList, handleShow }) => {
+const Countries = ({ countriesList, handleShow, handleBack }) => {
   const country = countriesList[0];
 
   if (countriesList.length >= 10) {
@@ -11,6 +11,9 @@ const Countries = ({ countriesList, handleShow }) => {
     const languages = Object.values(country.languages);
     return (
       <div>
+        <div>
+          <button onClick={handleBack}>back</button>
+        </div>
         <div>
           <h3>Country Name:</h3>
           {country.name.common}
@@ -27,7 +30,7 @@ const Countries = ({ countriesList, handleShow }) => {
           <h3>Languages:</h3>
           <ul>
             {languages.map((element) => (
-              <li>{element}</li>
+              <li key={element}>{element}</li>
             ))}
           </ul>
         </div>

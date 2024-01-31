@@ -7,8 +7,7 @@ import Countries from "./components/Countries";
 function App() {
   const [search, setSearch] = useState("");
   const [countriesList, setCountriesList] = useState([]);
-
-  console.log(search);
+  const [previousCountriesList, setPreviousCountriesList] = useState([]);
 
   useEffect(() => {}, []);
 
@@ -22,16 +21,25 @@ function App() {
   };
 
   const handleShow = (country) => {
+    setPreviousCountriesList(countriesList);
     setCountriesList([country]);
     // re-set the search after showing a single country
     setSearch("");
+  };
+
+  const handleBack = () => {
+    setCountriesList(previousCountriesList);
   };
 
   return (
     <>
       <h1>Country Inquiry</h1>
       <Search search={search} onChange={onChange} />
-      <Countries countriesList={countriesList} handleShow={handleShow} />
+      <Countries
+        countriesList={countriesList}
+        handleShow={handleShow}
+        handleBack={handleBack}
+      />
     </>
   );
 }
