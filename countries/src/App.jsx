@@ -21,11 +21,17 @@ function App() {
     });
   };
 
+  const handleShow = (country) => {
+    setCountriesList([country]);
+    // re-set the search after showing a single country
+    setSearch("");
+  };
+
   return (
     <>
       <h1>Country Inquiry</h1>
       <Search search={search} onChange={onChange} />
-      <Countries countriesList={countriesList} />
+      <Countries countriesList={countriesList} handleShow={handleShow} />
     </>
   );
 }

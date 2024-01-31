@@ -1,6 +1,7 @@
 import React from "react";
+import Country from "./Country";
 
-const Countries = ({ countriesList }) => {
+const Countries = ({ countriesList, handleShow }) => {
   const country = countriesList[0];
 
   if (countriesList.length >= 10) {
@@ -11,6 +12,10 @@ const Countries = ({ countriesList }) => {
     return (
       <div>
         <div>
+          <h3>Country Name:</h3>
+          {country.name.common}
+        </div>
+        <div>
           <h3>Capital:</h3>
           {country.capital}
         </div>
@@ -19,7 +24,7 @@ const Countries = ({ countriesList }) => {
           {country.area}
         </div>
         <div>
-          <h3>languages:</h3>
+          <h3>Languages:</h3>
           <ul>
             {languages.map((element) => (
               <li>{element}</li>
@@ -30,12 +35,15 @@ const Countries = ({ countriesList }) => {
       </div>
     );
   } else {
-    const countries = countriesList.map((country) => country.name.common);
-    console.log(countries);
+    console.log(countriesList);
     return (
       <div>
-        {countries.map((country) => (
-          <div key={country}>{country}</div>
+        {countriesList.map((country) => (
+          <Country
+            key={country.name.common}
+            country={country}
+            handleShow={handleShow}
+          />
         ))}
       </div>
     );
