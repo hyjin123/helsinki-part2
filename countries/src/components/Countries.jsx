@@ -1,44 +1,22 @@
 import React from "react";
 import Country from "./Country";
+import SingleCountry from "./SingleCountry";
 
-const Countries = ({ countriesList, handleShow, handleBack }) => {
+const Countries = ({ countriesList, handleShow, handleBack, toggleBack }) => {
   const country = countriesList[0];
 
   if (countriesList.length >= 10) {
     return <div>Too many matches, specify another filter</div>;
   } else if (countriesList.length === 1) {
-    // save the values of each language in the object so we can map through the array
-    const languages = Object.values(country.languages);
     return (
-      <div>
-        <div>
-          <button onClick={handleBack}>back</button>
-        </div>
-        <div>
-          <h3>Country Name:</h3>
-          {country.name.common}
-        </div>
-        <div>
-          <h3>Capital:</h3>
-          {country.capital}
-        </div>
-        <div>
-          <h3>Area Code:</h3>
-          {country.area}
-        </div>
-        <div>
-          <h3>Languages:</h3>
-          <ul>
-            {languages.map((element) => (
-              <li key={element}>{element}</li>
-            ))}
-          </ul>
-        </div>
-        <div style={{ fontSize: 160 }}>{country.flag}</div>
-      </div>
+      <SingleCountry
+        country={country}
+        countriesList={countriesList}
+        handleBack={handleBack}
+        toggleBack={toggleBack}
+      />
     );
   } else {
-    console.log(countriesList);
     return (
       <div>
         {countriesList.map((country) => (

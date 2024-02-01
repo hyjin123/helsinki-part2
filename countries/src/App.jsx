@@ -8,6 +8,7 @@ function App() {
   const [search, setSearch] = useState("");
   const [countriesList, setCountriesList] = useState([]);
   const [previousCountriesList, setPreviousCountriesList] = useState([]);
+  const [toggleBack, setToggleBack] = useState(false);
 
   useEffect(() => {}, []);
 
@@ -23,12 +24,12 @@ function App() {
   const handleShow = (country) => {
     setPreviousCountriesList(countriesList);
     setCountriesList([country]);
-    // re-set the search after showing a single country
-    setSearch("");
+    setToggleBack(true);
   };
 
   const handleBack = () => {
     setCountriesList(previousCountriesList);
+    setToggleBack(false);
   };
 
   return (
@@ -39,6 +40,7 @@ function App() {
         countriesList={countriesList}
         handleShow={handleShow}
         handleBack={handleBack}
+        toggleBack={toggleBack}
       />
     </>
   );
