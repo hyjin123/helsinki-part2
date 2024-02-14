@@ -104,18 +104,25 @@ const App = () => {
         id: persons.length + 1,
       };
       // if the name and number is not a duplicate, add new person to the database and re-set the list
-      personService.create(nameObject).then((response) => {
-        console.log(response);
-        // add new person to the list of persons
-        setPersons(persons.concat(nameObject));
-        setNewName("");
-        setNewNumber("");
-        // show the confirm notification for few seconds after adding a new person
-        setMessage(`${newName} was added`);
-        setTimeout(() => {
-          setMessage(null);
-        }, 3000);
-      });
+      personService
+        .create(nameObject)
+        .then((response) => {
+          // add new person to the list of persons
+          setPersons(persons.concat(nameObject));
+          setNewName("");
+          setNewNumber("");
+          // show the confirm notification for few seconds after adding a new person
+          setMessage(`${newName} was added`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 3000);
+        })
+        .catch((error) => {
+          setErrorMessage(error.response.data.error);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000);
+        });
     }
   };
 
