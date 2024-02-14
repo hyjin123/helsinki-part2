@@ -101,12 +101,12 @@ const App = () => {
       const nameObject = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
       };
       // if the name and number is not a duplicate, add new person to the database and re-set the list
       personService
         .create(nameObject)
         .then((response) => {
+          nameObject.id = response.id;
           // add new person to the list of persons
           setPersons(persons.concat(nameObject));
           setNewName("");
